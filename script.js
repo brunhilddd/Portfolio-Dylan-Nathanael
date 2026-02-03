@@ -309,6 +309,56 @@ if (document.readyState === 'loading') {
 }
 
 // ===================================
+// Case Study Sticky Image Scroll Effect
+// ===================================
+function initCaseStudyScrollEffect() {
+    const caseStudies = document.querySelectorAll('.case-study');
+    
+    caseStudies.forEach(caseStudy => {
+        const sections = caseStudy.querySelectorAll('.case-section');
+        const image = caseStudy.querySelector('.case-study-image img');
+        
+        if (!sections.length || !image) return;
+        
+        // Create intersection observer for each section
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Get the scroll index from data attribute
+                    const scrollIndex = entry.target.getAttribute('data-scroll');
+                    
+                    // Add subtle scale effect to image
+                    image.style.transition = 'transform 0.4s ease-out, opacity 0.3s ease-out';
+                    image.style.transform = 'scale(1.02)';
+                    image.style.opacity = '0.95';
+                    
+                    // Reset after animation
+                    setTimeout(() => {
+                        image.style.transform = 'scale(1)';
+                        image.style.opacity = '1';
+                    }, 400);
+                }
+            });
+        }, {
+            threshold: 0.5,
+            rootMargin: '-100px 0px -100px 0px'
+        });
+        
+        // Observe all sections
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    });
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCaseStudyScrollEffect);
+} else {
+    initCaseStudyScrollEffect();
+}
+
+// ===================================
 // Loading Animation
 // ===================================
 window.addEventListener('load', () => {
